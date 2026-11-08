@@ -1,0 +1,118 @@
+
+
+.splash-page {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: #f8fbff;
+    color: #142b5b;
+    
+    
+}
+.splash-visual {
+    position: relative;
+    min-height: 100vh;
+    overflow: hidden;
+    background: #dceeff;
+    border-radius:0 20% 20% 0;
+}
+.splash-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+.splash-visual::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+}
+.brand img{
+    height:150px;
+    width: 150px;
+    object-fit: cover;
+    border: 2px solid black;
+    border-radius: 50%; 
+}
+.splash-content{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.brand{
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    justify-content: center;
+}
+.brand p{
+    margin: 0;
+    font-size: clamp(30px, 3vw, 50px);
+    font-weight: 800;
+    letter-spacing: -2px;
+}
+.brand p span {
+    color: #1d58a9;
+}
+.get-started {
+    width: min(100%, 290px);
+    min-height: 56px;
+    padding: 14px 24px;
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 22px;
+    border: none;
+    border-radius: 40px;
+    background: #1473f9;
+    color: white;
+    font-weight: 700;
+    font-size: 16px;
+    box-shadow: 0 10px 25px rgba(20, 115, 249, 0.22);
+    transition: background 0.2s, transform 0.2s;
+}
+.get-started:hover {
+    background: #095bd0;
+    transform: translateY(-3px);
+}
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (max-width: 900px) {
+    .splash-page {
+        grid-template-columns: 0.85fr 1.15fr;
+    }
+ 
+}
+
+@media (max-width: 600px) {
+    .splash-page {
+        grid-template-columns: 1fr;   
+    }
+    .splash-visual {
+        min-height: 260px;
+        height: 42vh;
+        border-radius: 0 0 8% 8%;
+        margin-bottom: 20px; 
+    }
+    .splash-content{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom:150px;
+    }
+    .get-started {
+        min-height: 52px;
+    }
+
+  
+
+}
