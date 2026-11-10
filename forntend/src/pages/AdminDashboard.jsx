@@ -1,34 +1,73 @@
-
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import "./AdminDashboard.css";
-import applogo from"../assets/images/Study Smarter Not Harder.png";
-import moonico from"../assets/icons/moon-regular-full.svg";
+import applogo from "../assets/images/Study Smarter Not Harder.png";
+import moonico from "../assets/icons/moon-regular-full.svg";
 import sunico from "../assets/icons/sun-solid-full.svg";
-import homeico from"../assets/icons/home.svg";
-import bookico from"../assets/icons/book-open.svg";
-import fileico from"../assets/icons/file.svg";
-import departmentico from"../assets/icons/department.svg";
-import questionico from"../assets/icons/question.svg";
+import homeico from "../assets/icons/home.svg";
+import bookico from "../assets/icons/book-open.svg";
+import fileico from "../assets/icons/file.svg";
+import departmentico from "../assets/icons/department.svg";
+import questionico from "../assets/icons/question.svg";
 import plus from "../assets/icons/pus-icon.svg";
 
 const initialDepartments = [
-  { id: 1, name: "Computing", programs: ["Software Engineering", "Information Technology"] },
-  { id: 2, name: "Electrical Engineering", programs: ["Power Engineering", "Electronics"] },
+  {
+    id: 1,
+    name: "Computing",
+    programs: ["Software Engineering", "Information Technology"],
+  },
+  {
+    id: 2,
+    name: "Electrical Engineering",
+    programs: ["Power Engineering", "Electronics"],
+  },
 ];
 
 const initialCourses = [
-  { id: 1, department: "Computing", program: "Software Engineering", semester: "First Semester", name: "Object-Oriented Programming", code: "OOP101" },
-  { id: 2, department: "Computing", program: "Software Engineering", semester: "First Semester", name: "Database Systems", code: "DB102" },
+  {
+    id: 1,
+    department: "Computing",
+    program: "Software Engineering",
+    semester: "First Semester",
+    name: "Object-Oriented Programming",
+    code: "OOP101",
+  },
+  {
+    id: 2,
+    department: "Computing",
+    program: "Software Engineering",
+    semester: "First Semester",
+    name: "Database Systems",
+    code: "DB102",
+  },
 ];
 
 const initialResources = [
-  { id: 1, course: "Object-Oriented Programming", title: "Introduction to OOP", type: "PDF", fileName: "oop-introduction.pdf" },
-  { id: 2, course: "Database Systems", title: "Database Short Notes", type: "Short Notes", fileName: "—" },
+  {
+    id: 1,
+    course: "Object-Oriented Programming",
+    title: "Introduction to OOP",
+    type: "PDF",
+    fileName: "oop-introduction.pdf",
+  },
+  {
+    id: 2,
+    course: "Database Systems",
+    title: "Database Short Notes",
+    type: "Short Notes",
+    fileName: "—",
+  },
 ];
 
 const initialQuestions = [
-  { id: 1, course: "Object-Oriented Programming", question: "What is encapsulation?", answer: "Encapsulation bundles data and methods and controls access to an object's state." },
+  {
+    id: 1,
+    course: "Object-Oriented Programming",
+    question: "What is encapsulation?",
+    answer:
+      "Encapsulation bundles data and methods and controls access to an object's state.",
+  },
 ];
 function AdminDashboard() {
   const [darkMode, setDarkMode] = useState(false);
@@ -48,12 +87,16 @@ function AdminDashboard() {
   const [courseProgram, setCourseProgram] = useState("Software Engineering");
   const [semester, setSemester] = useState("First Semester");
 
-  const [resourceCourse, setResourceCourse] = useState("Object-Oriented Programming");
+  const [resourceCourse, setResourceCourse] = useState(
+    "Object-Oriented Programming",
+  );
   const [resourceTitle, setResourceTitle] = useState("");
   const [resourceType, setResourceType] = useState("PDF");
   const [resourceFile, setResourceFile] = useState(null);
 
-  const [questionCourse, setQuestionCourse] = useState("Object-Oriented Programming");
+  const [questionCourse, setQuestionCourse] = useState(
+    "Object-Oriented Programming",
+  );
   const [questionText, setQuestionText] = useState("");
   const [answerText, setAnswerText] = useState("");
 
@@ -63,14 +106,13 @@ function AdminDashboard() {
     { name: "Courses", icon: bookico },
     { name: "Materials & Notes", icon: fileico },
     { name: "Questions", icon: questionico },
-    
   ];
 
   const allPrograms = departments.flatMap((department) =>
     department.programs.map((program) => ({
       name: program,
       department: department.name,
-    }))
+    })),
   );
 
   function showNotice(message) {
@@ -87,13 +129,13 @@ function AdminDashboard() {
     if (!name || !program) return;
 
     const existing = departments.find(
-      (item) => item.name.toLowerCase() === name.toLowerCase()
+      (item) => item.name.toLowerCase() === name.toLowerCase(),
     );
 
     if (existing) {
       if (
         existing.programs.some(
-          (item) => item.toLowerCase() === program.toLowerCase()
+          (item) => item.toLowerCase() === program.toLowerCase(),
         )
       ) {
         showNotice("That program already exists in this department.");
@@ -104,8 +146,8 @@ function AdminDashboard() {
         current.map((item) =>
           item.id === existing.id
             ? { ...item, programs: [...item.programs, program] }
-            : item
-        )
+            : item,
+        ),
       );
     } else {
       setDepartments((current) => [
@@ -157,9 +199,10 @@ function AdminDashboard() {
         course: resourceCourse,
         title: resourceTitle.trim(),
         type: resourceType,
-        fileName: resourceType === "PDF"
-          ? resourceFile?.name || "No file selected"
-          : "—",
+        fileName:
+          resourceType === "PDF"
+            ? resourceFile?.name || "No file selected"
+            : "—",
       },
     ]);
 
@@ -208,8 +251,10 @@ function AdminDashboard() {
     <div className={`admin-layout ${darkMode ? "dark-mode" : "light-mode"}`}>
       <aside className="admin-sidebar">
         <Link to="/" className="admin-brand">
-          <img className="admin-brand-icon" src={applogo}/>
-          <span>UniExam<small>ADMIN PANEL</small></span>
+          <img className="admin-brand-icon" src={applogo} />
+          <span>
+            UniExam<small>ADMIN PANEL</small>
+          </span>
         </Link>
 
         <p className="admin-nav-label">WORKSPACE</p>
@@ -218,25 +263,35 @@ function AdminDashboard() {
           {sections.map((section) => (
             <button
               key={section.name}
-              className={activeSection === section.name ? "admin-nav-item active" : "admin-nav-item"}
+              className={
+                activeSection === section.name
+                  ? "admin-nav-item active"
+                  : "admin-nav-item"
+              }
               onClick={() => setActiveSection(section.name)}
             >
-              <span className="admin-nav-icon"><img src={section.icon} alt="sidebar icons" /></span>
+              <span className="admin-nav-icon">
+                <img src={section.icon} alt="sidebar icons" />
+              </span>
               {section.name}
             </button>
           ))}
         </nav>
 
- 
         <div className="admin-sidebar-bottom">
           <div className="sidebar-footer admin-nav-item">
-           <div> <span className="admin-avatar">A</span></div>
             <div>
-                <strong>Administrator</strong>
-                <small>Content management</small>
-             </div>
+              {" "}
+              <span className="admin-avatar">A</span>
+            </div>
+            <div>
+              <strong>Administrator</strong>
+              <small>Content management</small>
+            </div>
           </div>
-          <div className="admin-nav-item"><span>-&gt;Logout</span></div>
+          <div className="admin-nav-item">
+            <span>-&gt;Logout</span>
+          </div>
         </div>
       </aside>
 
@@ -247,22 +302,24 @@ function AdminDashboard() {
             <h1>{activeSection}</h1>
           </div>
           <div className="top-buttons">
-              <div>
-                <button
-                  type="button"
-                  className="theme-toggle"
-                  onClick={() => setDarkMode((current) => !current)}
-                  aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
-                >
-                <img className="darkmode" src={darkMode?sunico:moonico}/>
-                </button>
-              </div>
+            <div>
+              <button
+                type="button"
+                className="theme-toggle"
+                onClick={() => setDarkMode((current) => !current)}
+                aria-label={
+                  darkMode ? "Switch to light mode" : "Switch to dark mode"
+                }
+              >
+                <img className="darkmode" src={darkMode ? sunico : moonico} />
+              </button>
+            </div>
 
-           <div>
-             <Link to="/naturalHome" className="admin-home-link">
-              View Users Page
-             </Link>
-           </div>
+            <div>
+              <Link to="/naturalHome" className="admin-home-link">
+                View Users Page
+              </Link>
+            </div>
           </div>
         </header>
 
@@ -282,17 +339,34 @@ function AdminDashboard() {
 
             <section className="admin-stat-grid">
               {[
-                { label: "Departments", count: departments.length, icon: homeico },
-                { label: "Programs", count: allPrograms.length, icon:departmentico },
-                { label: "Courses", count: courses.length, icon:bookico },
-                { label: "Resources", count: resources.length, icon:fileico },
-                { label: "Questions", count: questions.length, icon:questionico },
+                {
+                  label: "Departments",
+                  count: departments.length,
+                  icon: homeico,
+                },
+                {
+                  label: "Programs",
+                  count: allPrograms.length,
+                  icon: departmentico,
+                },
+                { label: "Courses", count: courses.length, icon: bookico },
+                { label: "Resources", count: resources.length, icon: fileico },
+                {
+                  label: "Questions",
+                  count: questions.length,
+                  icon: questionico,
+                },
               ].map((stat) => (
-                <article className="admin-stat-card stat-card-flex" key={stat.label}>
-                  <div className="admin-stat-icon"><img src={stat.icon} alt="icons of stat card" /></div>
+                <article
+                  className="admin-stat-card stat-card-flex"
+                  key={stat.label}
+                >
+                  <div className="admin-stat-icon">
+                    <img src={stat.icon} alt="icons of stat card" />
+                  </div>
                   <div>
-                     <p>{stat.label}</p>
-                     <strong>{stat.count}</strong>
+                    <p>{stat.label}</p>
+                    <strong>{stat.count}</strong>
                   </div>
                 </article>
               ))}
@@ -308,19 +382,21 @@ function AdminDashboard() {
 
               <div className="admin-quick-grid">
                 {[
-                  ["Departments", "Add departments and programs",plus],
+                  ["Departments", "Add departments and programs", plus],
                   ["Courses", "Create courses by semester", bookico],
-                  ["Materials & Notes", "Organize PDFs and notes",fileico],
-                  ["Questions", "Prepare practice questions",questionico],
+                  ["Materials & Notes", "Organize PDFs and notes", fileico],
+                  ["Questions", "Prepare practice questions", questionico],
                 ].map(([name, description, icon]) => (
                   <button
-                      className="admin-quick-card"
-                      key={name}
-                      onClick={() => setActiveSection(name)}
-                    >
-                      <div className="admin-quick-icons"><img src={icon} alt="icon images" /></div>
-                      <strong>{name}</strong>
-                      <small>{description}</small>
+                    className="admin-quick-card"
+                    key={name}
+                    onClick={() => setActiveSection(name)}
+                  >
+                    <div className="admin-quick-icons">
+                      <img src={icon} alt="icon images" />
+                    </div>
+                    <strong>{name}</strong>
+                    <small>{description}</small>
                   </button>
                 ))}
               </div>
@@ -333,8 +409,8 @@ function AdminDashboard() {
             <section className="admin-panel">
               <h2>Add a department or program</h2>
               <p className="admin-muted">
-                Add a new department with its first program, or add a program
-                to an existing department.
+                Add a new department with its first program, or add a program to
+                an existing department.
               </p>
 
               <form className="admin-form" onSubmit={addDepartment}>
@@ -356,7 +432,25 @@ function AdminDashboard() {
                     required
                   />
                 </label>
-                <button className="admin-primary-button">Add Department / Program</button>
+
+                <label>
+                  Background Image
+                  <input
+                    value={programName}
+                    onChange={(event) => setProgramName(event.target.value)}
+                    placeholder="e.g. image of a department"
+                    required
+                  />
+                </label>
+
+                <label htmlFor="status">
+                  Department Status
+                  <select id="status" name="status" required>
+                    <option value="ACTIVE">Active</option>
+                    <option value="INACTIVE">Inactive</option>
+                  </select>
+                </label>
+                <button className="admin-primary-button">Add Department</button>
               </form>
             </section>
 
@@ -397,7 +491,9 @@ function AdminDashboard() {
                     }}
                   >
                     {departments.map((item) => (
-                      <option key={item.id} value={item.name}>{item.name}</option>
+                      <option key={item.id} value={item.name}>
+                        {item.name}
+                      </option>
                     ))}
                   </select>
                 </label>
@@ -409,15 +505,23 @@ function AdminDashboard() {
                     onChange={(event) => setCourseProgram(event.target.value)}
                     required
                   >
-                    {(departments.find((d) => d.name === selectedDepartment)?.programs || []).map((program) => (
-                      <option key={program} value={program}>{program}</option>
+                    {(
+                      departments.find((d) => d.name === selectedDepartment)
+                        ?.programs || []
+                    ).map((program) => (
+                      <option key={program} value={program}>
+                        {program}
+                      </option>
                     ))}
                   </select>
                 </label>
 
                 <label>
                   Semester
-                  <select value={semester} onChange={(event) => setSemester(event.target.value)}>
+                  <select
+                    value={semester}
+                    onChange={(event) => setSemester(event.target.value)}
+                  >
                     <option>First Semester</option>
                     <option>Second Semester</option>
                   </select>
@@ -425,12 +529,22 @@ function AdminDashboard() {
 
                 <label>
                   Course name
-                  <input value={courseName} onChange={(event) => setCourseName(event.target.value)} placeholder="e.g. Database Systems" required />
+                  <input
+                    value={courseName}
+                    onChange={(event) => setCourseName(event.target.value)}
+                    placeholder="e.g. Database Systems"
+                    required
+                  />
                 </label>
 
                 <label>
                   Course code
-                  <input value={courseCode} onChange={(event) => setCourseCode(event.target.value)} placeholder="e.g. DB102" required />
+                  <input
+                    value={courseCode}
+                    onChange={(event) => setCourseCode(event.target.value)}
+                    placeholder="e.g. DB102"
+                    required
+                  />
                 </label>
 
                 <button className="admin-primary-button">Add Course</button>
@@ -443,9 +557,16 @@ function AdminDashboard() {
                 <article className="admin-list-card" key={course.id}>
                   <div>
                     <strong>{course.name}</strong>
-                    <p>{course.code} · {course.program} · {course.semester}</p>
+                    <p>
+                      {course.code} · {course.program} · {course.semester}
+                    </p>
                   </div>
-                  <button className="admin-delete-button" onClick={() => deleteItem("Courses", course.id)}>Remove</button>
+                  <button
+                    className="admin-delete-button"
+                    onClick={() => deleteItem("Courses", course.id)}
+                  >
+                    Remove
+                  </button>
                 </article>
               ))}
             </section>
@@ -462,16 +583,25 @@ function AdminDashboard() {
               <form className="admin-form" onSubmit={addResource}>
                 <label>
                   Course
-                  <select value={resourceCourse} onChange={(event) => setResourceCourse(event.target.value)} required>
+                  <select
+                    value={resourceCourse}
+                    onChange={(event) => setResourceCourse(event.target.value)}
+                    required
+                  >
                     {courses.map((course) => (
-                      <option key={course.id} value={course.name}>{course.name}</option>
+                      <option key={course.id} value={course.name}>
+                        {course.name}
+                      </option>
                     ))}
                   </select>
                 </label>
 
                 <label>
                   Resource type
-                  <select value={resourceType} onChange={(event) => setResourceType(event.target.value)}>
+                  <select
+                    value={resourceType}
+                    onChange={(event) => setResourceType(event.target.value)}
+                  >
                     <option>PDF</option>
                     <option>Short Notes</option>
                   </select>
@@ -479,7 +609,12 @@ function AdminDashboard() {
 
                 <label>
                   Title
-                  <input value={resourceTitle} onChange={(event) => setResourceTitle(event.target.value)} placeholder="e.g. Chapter One Notes" required />
+                  <input
+                    value={resourceTitle}
+                    onChange={(event) => setResourceTitle(event.target.value)}
+                    placeholder="e.g. Chapter One Notes"
+                    required
+                  />
                 </label>
 
                 {resourceType === "PDF" ? (
@@ -488,12 +623,15 @@ function AdminDashboard() {
                     <input
                       type="file"
                       accept=".pdf,application/pdf"
-                      onChange={(event) => setResourceFile(event.target.files?.[0] || null)}
+                      onChange={(event) =>
+                        setResourceFile(event.target.files?.[0] || null)
+                      }
                     />
                   </label>
                 ) : (
                   <p className="admin-muted">
-                    Short-note text editing and saving will be added in the next iteration.
+                    Short-note text editing and saving will be added in the next
+                    iteration.
                   </p>
                 )}
 
@@ -507,9 +645,16 @@ function AdminDashboard() {
                 <article className="admin-list-card" key={resource.id}>
                   <div>
                     <strong>{resource.title}</strong>
-                    <p>{resource.course} · {resource.type} · {resource.fileName}</p>
+                    <p>
+                      {resource.course} · {resource.type} · {resource.fileName}
+                    </p>
                   </div>
-                  <button className="admin-delete-button" onClick={() => deleteItem("Materials & Notes", resource.id)}>Remove</button>
+                  <button
+                    className="admin-delete-button"
+                    onClick={() => deleteItem("Materials & Notes", resource.id)}
+                  >
+                    Remove
+                  </button>
                 </article>
               ))}
             </section>
@@ -523,21 +668,39 @@ function AdminDashboard() {
               <form className="admin-form" onSubmit={addQuestion}>
                 <label>
                   Course
-                  <select value={questionCourse} onChange={(event) => setQuestionCourse(event.target.value)} required>
+                  <select
+                    value={questionCourse}
+                    onChange={(event) => setQuestionCourse(event.target.value)}
+                    required
+                  >
                     {courses.map((course) => (
-                      <option key={course.id} value={course.name}>{course.name}</option>
+                      <option key={course.id} value={course.name}>
+                        {course.name}
+                      </option>
                     ))}
                   </select>
                 </label>
 
                 <label>
                   Question
-                  <textarea value={questionText} onChange={(event) => setQuestionText(event.target.value)} placeholder="Write the question..." rows="3" required />
+                  <textarea
+                    value={questionText}
+                    onChange={(event) => setQuestionText(event.target.value)}
+                    placeholder="Write the question..."
+                    rows="3"
+                    required
+                  />
                 </label>
 
                 <label>
                   Answer or explanation
-                  <textarea value={answerText} onChange={(event) => setAnswerText(event.target.value)} placeholder="Write the correct answer..." rows="4" required />
+                  <textarea
+                    value={answerText}
+                    onChange={(event) => setAnswerText(event.target.value)}
+                    placeholder="Write the correct answer..."
+                    rows="4"
+                    required
+                  />
                 </label>
 
                 <button className="admin-primary-button">Add Question</button>
@@ -550,9 +713,16 @@ function AdminDashboard() {
                 <article className="admin-list-card" key={question.id}>
                   <div>
                     <strong>{question.question}</strong>
-                    <p>{question.course} · {question.answer}</p>
+                    <p>
+                      {question.course} · {question.answer}
+                    </p>
                   </div>
-                  <button className="admin-delete-button" onClick={() => deleteItem("Questions", question.id)}>Remove</button>
+                  <button
+                    className="admin-delete-button"
+                    onClick={() => deleteItem("Questions", question.id)}
+                  >
+                    Remove
+                  </button>
                 </article>
               ))}
             </section>

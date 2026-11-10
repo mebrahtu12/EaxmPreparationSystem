@@ -90,8 +90,7 @@ function Login() {
           />
           {error && <p className="error-message">{error}</p>}
           <button className="auth-button" type="submit" disabled={loading}>
-            {loading ? "Logging in ..." : "Login"}{" "}
-            <span aria-hidden="true">→</span>
+            {loading ? "Logging in ..." : "Login  ->"}
           </button>
         </form>
 

@@ -18,14 +18,35 @@ enum Stream {
   NATURAL
 }
 
+enum Status {
+  ACTIVE
+  INACTIVE
+}
+
+enum Semester {
+  FIRST
+  SECOND
+}
+
+enum QuestionType {
+  MCQ
+  TRUE_FALSE
+  SHORT_ANSWER
+}
+
 model User {
-  id        Int      @id @default(autoincrement())
-  username  String   @unique
-  email     String   @unique
-  password  String
-  stream    Stream
-  createdAt DateTime @default(now())
+  id                 Int                 @id @default(autoincrement())
+  username           String              @unique
+  email              String              @unique
+  password           String
+  stream             Stream
+  createdAt          DateTime            @default(now())
   passwordResetToken PasswordResetToken[]
+
+  materials          Material[]
+  questionsCreated   Question[]
+  practiceSessions   PracticeSession[]
+  bookmarks          Bookmark[]
 }
 
 model PasswordResetToken {
@@ -34,8 +55,188 @@ model PasswordResetToken {
   userId    Int
   expiresAt DateTime
   createdAt DateTime @default(now())
-
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
+}
+
+model Department {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  imageUrl  String?
+  status    Status
+  createdAt DateTime @default(now())
+  programs Program[]
+}
+
+model Program {
+  id           String   @id @default(uuid())
+  departmentId String
+  name         String
+  createdAt    DateTime @default(now())
+
+  department Department       @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+  courses    ProgramCourse[]
+
+  @@unique([departmentId, name])
+}
+
+model AcademicYear {
+  id        String   @id @default(uuid())
+  name      String
+  order     Int
+  createdAt DateTime @default(now())
+
+  programCourses ProgramCourse[]
+
+  @@unique([name])
+  @@unique([order])
+}
+
+model Course {
+  id        String   @id @default(uuid())
+  title     String
+  code      String   @unique
+  createdAt DateTime @default(now())
+
+  programCourses ProgramCourse[]
+  topics         Topic[]
+  materials      Material[]
+  questions      Question[]
+  practiceSessions PracticeSession[]
+}
+
+model ProgramCourse {
+  id             String   @id @default(uuid())
+  programId      String
+  courseId       String
+  academicYearId String
+  semester       Semester
+  createdAt      DateTime @default(now())
+
+  program      Program      @relation(fields: [programId], references: [id], onDelete: Cascade)
+  course       Course       @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  academicYear AcademicYear @relation(fields: [academicYearId], references: [id], onDelete: Cascade)
+
+  @@unique([programId, courseId, academicYearId, semester])
+}
+
+model Topic {
+  id        String   @id @default(uuid())
+  courseId  String
+  title     String
+  order     Int
+  createdAt DateTime @default(now())
+
+  course           Course           @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  materials        Material[]
+  questions        Question[]
+  practiceSessions PracticeSession[]
+
+  @@unique([courseId, order])
+}
+
+model Material {
+  id               String   @id @default(uuid())
+  courseId         String
+  topicId          String?
+  title            String
+  originalFileName String
+  fileUrl          String
+  storageKey       String
+  createdAt        DateTime @default(now())
+
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  topic  Topic? @relation(fields: [topicId], references: [id], onDelete: SetNull)
+  uploadedBy User? @relation(fields: [uploadedById], references: [id], onDelete: SetNull)
+  uploadedById Int?
+}
+
+model Question {
+  id           String       @id @default(uuid())
+  courseId     String
+  topicId      String?
+  questionText String
+  questionType QuestionType
+  marks        Float
+  explanation  String?
+  createdAt    DateTime     @default(now())
+
+  course          Course          @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  topic           Topic?          @relation(fields: [topicId], references: [id], onDelete: SetNull)
+  options         QuestionOption[]
+  answer          QuestionAnswer?
+  practiceAnswers PracticeAnswer[]
+  bookmarks       Bookmark[]
+  createdBy       User?           @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  createdById     Int?
+}
+
+model QuestionOption {
+  id         String   @id @default(uuid())
+  questionId String
+  optionText String
+  isCorrect  Boolean
+  order      Int
+  createdAt  DateTime @default(now())
+  
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  practiceAnswers PracticeAnswer[]
+  @@unique([questionId, order])
+}
+
+model QuestionAnswer {
+  id             String   @id @default(uuid())
+  questionId     String   @unique
+  correctBoolean Boolean?
+  expectedAnswer String?
+  explanation    String?
+  createdAt      DateTime @default(now())
+
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+}
+
+model PracticeSession {
+  id             String    @id @default(uuid())
+  studentId      Int
+  courseId       String
+  topicId        String?
+  startedAt      DateTime  @default(now())
+  completedAt    DateTime?
+  totalQuestions Int
+  correctAnswers Int
+  score          Float?
+  createdAt      DateTime  @default(now())
+
+  student  User     @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  course   Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  topic    Topic?   @relation(fields: [topicId], references: [id], onDelete: SetNull)
+  answers  PracticeAnswer[]
+}
+
+model PracticeAnswer {
+  id                String   @id @default(uuid())
+  practiceSessionId String
+  questionId        String
+  selectedOptionId  String?
+  booleanAnswer     Boolean?
+  textAnswer        String?
+  isCorrect         Boolean
+  answeredAt        DateTime @default(now())
+
+  practiceSession PracticeSession @relation(fields: [practiceSessionId], references: [id], onDelete: Cascade)
+  question        Question        @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  selectedOption  QuestionOption? @relation(fields: [selectedOptionId], references: [id], onDelete: SetNull)
+}
+
+model Bookmark {
+  id         String   @id @default(uuid())
+  studentId  Int
+  questionId String
+  createdAt  DateTime @default(now())
+
+  student  User     @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, questionId])
 }

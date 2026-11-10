@@ -33,7 +33,7 @@
   padding: 30px 18px 20px;
   display: flex;
   flex-direction: column;
-  background: #171b35;
+  background: #3d347e;
   color: #fff;
 }
 
@@ -79,7 +79,7 @@
   border: 0;
   border-radius: 9px;
   background: transparent;
-  color: #b8bfd4;
+  color: red;
   text-align: left;
   text-decoration: none;
   font-size: 13px;
@@ -105,8 +105,8 @@
 
 .sidebar-link:hover,
 .sidebar-link.active {
-  background: rgba(131, 117, 255, 0.16);
-  color: #fff;
+  background: rgb(180, 230, 235);
+  color: #000;
 }
 
 .sidebar-link.active {

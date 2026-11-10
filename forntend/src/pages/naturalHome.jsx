@@ -51,6 +51,7 @@ function Home() {
   const [activeCategory, setActiveCategory] = useState("All");
   const [search, setSearch] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
+  const [activeLink, setActiveLink] = useState("home");
   let availableCourse = 0;
 
   const filtereddept = depts.filter((dept) => {
@@ -108,7 +109,11 @@ function Home() {
         <p className="sidebar-label">WORKSPACE</p>
 
         <nav className="sidebar-nav" aria-label="Main navigation">
-          <Link to="/home" className="sidebar-link active">
+          <Link
+            to="/home"
+            className={`sidebar-link ${activeLink === "home" ? "active" : ""}`}
+            onClick={() => setActiveLink("home")}
+          >
             <span>
               <img src={homeico} alt="" />
             </span>{" "}
@@ -116,12 +121,13 @@ function Home() {
           </Link>
 
           <button
-            className="sidebar-link"
-            onClick={() =>
+            className={`sidebar-link ${activeLink === "courses" ? "active" : ""}`}
+            onClick={() => {
               document.getElementById("courses")?.scrollIntoView({
                 behavior: "smooth",
-              })
-            }
+              });
+              setActiveLink("courses");
+            }}
           >
             <span>
               <img src={bookico} alt="book icon" />
@@ -129,13 +135,22 @@ function Home() {
             My Courses
           </button>
 
-          <button className="sidebar-link" onClick={() => navigate("/history")}>
+          <button
+            className={`sidebar-link ${activeLink === "History" ? "active" : ""}`}
+            onClick={() => {
+              navigate("/history");
+              setActiveLink("History");
+            }}
+          >
             <span>◷</span> Study History
           </button>
 
           <button
-            className="sidebar-link"
-            onClick={() => navigate("/settings")}
+            className={`sidebar-link ${activeLink === "Setting" ? "active" : ""}`}
+            onClick={() => {
+              navigate("/settings");
+              setActiveLink("Setting");
+            }}
           >
             <span>⚙</span> Settings
           </button>
